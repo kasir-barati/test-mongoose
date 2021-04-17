@@ -1,0 +1,20 @@
+{
+    "tabWidth": 4,
+    "useTabs": false,
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "endOfLine": "lf",
+    "semi": true,
+    "singleQuote": true,
+    "quoteProps": "consistent",
+    "trailingComma": "all",
+    "printWidth": 70,
+    "overrides": [
+        {
+            "files": "*.yml",
+            "options": {
+                "singleQuote": false
+            }
+        }
+    ]
+}
