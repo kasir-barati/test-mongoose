@@ -9,7 +9,7 @@ const { TicketMessagesModel } = require('../schemas/ticket-messages');
  * @param {string} [repliedTo=null]
  * @returns {Promise<string>} ticket message id
  */
-async function create(userId, content, ticketId, repliedTo = null) {
+async function insert(userId, content, ticketId, repliedTo = null) {
     return (
         await new TicketMessagesModel({
             userId,
@@ -21,5 +21,5 @@ async function create(userId, content, ticketId, repliedTo = null) {
 }
 
 module.exports = {
-    create,
+    insert,
 };

@@ -15,7 +15,7 @@ async function insertDummy(
     ticketId,
     repliedTo = null,
 ) {
-    return await ticketMessageRepository.create(
+    return await ticketMessageRepository.insert(
         userId,
         content,
         ticketId,

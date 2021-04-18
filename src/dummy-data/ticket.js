@@ -20,7 +20,7 @@ async function insertDummy(
     departementId,
     assigneeObj,
 ) {
-    return await ticketRepository.create(
+    return await ticketRepository.insert(
         title,
         userId,
         priorityId,

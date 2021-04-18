@@ -13,7 +13,7 @@ const { TicketModel } = require('../schemas/tickets');
  * @param {string} assigneeObj.description
  * @returns {Promise<string>} created ticket's id
  */
-async function create(
+async function insert(
     title,
     userId,
     priorityId,
@@ -32,4 +32,4 @@ async function create(
     return (await newTicket.save()).id;
 }
 
-module.exports = { create };
+module.exports = { insert };
