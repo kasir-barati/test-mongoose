@@ -6,21 +6,21 @@ const { TicketMessagesModel } = require('../schemas/ticket-messages');
  * @param {string} userId
  * @param {string} content
  * @param {string} ticketId
- * @param {string} [messageId=null]
+ * @param {string} [repliedTo=null]
  * @returns {Promise<string>} ticket message id
  */
 async function insertDummy(
     userId,
     content,
     ticketId,
-    messageId = null,
+    repliedTo = null,
 ) {
     return (
         await new TicketMessagesModel({
             userId,
             content,
             ticketId,
-            messageId,
+            repliedTo,
         }).save()
     ).id;
 }

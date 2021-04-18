@@ -8,9 +8,12 @@ const COLLECTION_NAME = 'ticket-message';
 const ticketMessagesSchema = new Schema(
     {
         userId: { type: String, required: true },
+        // content can be:
+        // - text (User write his/her text message)
+        // - link to the file (image, zip file, etc)
         content: { type: String, required: true },
         ticketId: { type: String, required: true },
-        messageId: {
+        repliedTo: {
             type: mongoose.Types.ObjectId,
             ref: COLLECTION_NAME,
             required: false,
