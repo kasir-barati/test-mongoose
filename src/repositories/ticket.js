@@ -1,5 +1,5 @@
 // @ts-check
-const ticketRepository = require('../repositories/ticket');
+const { TicketModel } = require('../schemas/tickets');
 
 /**
  *
@@ -13,20 +13,23 @@ const ticketRepository = require('../repositories/ticket');
  * @param {string} assigneeObj.description
  * @returns {Promise<string>} created ticket's id
  */
-async function insertDummy(
+async function create(
     title,
     userId,
     priorityId,
     departementId,
     assigneeObj,
 ) {
-    return await ticketRepository.create(
+    const newTicket = new TicketModel({
         title,
-        userId,
-        priorityId,
-        departementId,
-        assigneeObj,
-    );
+        owner: userId,
+        priority: priorityId,
+        departemant: departementId,
+    });
+
+    newTicket.assigneTicket(assigneeObj);
+
+    return (await newTicket.save()).id;
 }
 
-module.exports = { insertDummy };
+module.exports = { create };

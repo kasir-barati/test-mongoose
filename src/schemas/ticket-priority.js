@@ -9,7 +9,7 @@ const ticketPrioritySchema = new Schema(
         title: { type: String, required: true, unique: true },
         overdueIn: { type: Number, required: true, default: 2880 }, // Minutes until overdue (48 Hours)
         htmlColor: { type: String, default: '#29b955' },
-        default: { type: Boolean },
+        isDefault: { type: Boolean },
     },
     {
         timestamps: true,

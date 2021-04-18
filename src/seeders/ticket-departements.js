@@ -1,7 +1,5 @@
 // @ts-check
-const {
-    TicketDepartementModel,
-} = require('../schemas/ticket-departements');
+const ticketDepartementRepository = require('../repositories/ticket-departement');
 
 /**
  * @typedef insertType
@@ -14,18 +12,14 @@ const {
  * @returns {Promise<insertType>}
  */
 async function insert(userIds) {
-    let departement = new TicketDepartementModel({
-        name: 'support',
-        members: userIds.filter((id, index) => {
-            if (index !== userIds.length - 1) {
-                return id;
-            }
-        }),
-    });
-    departement.addMember(userIds[userIds.length]);
+    let supportDepartementId = ticketDepartementRepository.insert(
+        'support',
+        userIds[0],
+        userIds,
+    );
 
     return {
-        supportDepartementId: (await departement.save()).id,
+        supportDepartementId: await supportDepartementId,
     };
 }
 

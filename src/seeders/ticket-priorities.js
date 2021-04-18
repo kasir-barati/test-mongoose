@@ -1,5 +1,5 @@
 // @ts-check
-const { TicketPriorityModel } = require('../schemas/ticket-priority');
+const ticketPriorityRepository = require('../repositories/ticket-priority');
 
 /**
  * @typedef insertType
@@ -13,35 +13,34 @@ const { TicketPriorityModel } = require('../schemas/ticket-priority');
  * @returns {Promise<insertType>}
  */
 async function insert() {
-    const normalPriority = new TicketPriorityModel({
-        title: 'normal',
-        default: true,
-    }).save();
-    const criticalPriority = new TicketPriorityModel({
-        title: 'critical',
-        overdueIn: 2280, // 38 hour
-        htmlColor: '#dfee02',
-        default: true,
-    }).save();
-    const urgentPriority = new TicketPriorityModel({
-        title: 'urgent',
-        overdueIn: 1680, // 28 hour
-        htmlColor: '#ee5902',
-        default: true,
-    }).save();
-    const criticalAndUrgentPriority = new TicketPriorityModel({
-        title: 'critical and urgent',
-        overdueIn: 1080, // 18 hour
-        htmlColor: '#b40b0b',
-        default: true,
-    }).save();
+    const normalPriority = ticketPriorityRepository.insert(
+        'normal',
+        true,
+    );
+    const criticalPriority = ticketPriorityRepository.insert(
+        'critical',
+        true,
+        2280, // 38 hour
+        '#dfee02',
+    );
+    const urgentPriority = ticketPriorityRepository.insert(
+        'urgent',
+        true,
+        1680, // 28 hour
+        '#ee5902',
+    );
+    const criticalAndUrgentPriority = ticketPriorityRepository.insert(
+        'critical-and-urgent',
+        true,
+        1080, // 18 hour
+        '#b40b0b',
+    );
 
     return {
-        normalPriorityId: (await normalPriority).id,
-        urgentPriorityId: (await criticalPriority).id,
-        criticalPriorityId: (await urgentPriority).id,
-        criticalAndUrgentPriorityId: (await criticalAndUrgentPriority)
-            .id,
+        normalPriorityId: await normalPriority,
+        urgentPriorityId: await criticalPriority,
+        criticalPriorityId: await urgentPriority,
+        criticalAndUrgentPriorityId: await criticalAndUrgentPriority,
     };
 }
 

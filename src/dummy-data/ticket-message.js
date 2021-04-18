@@ -1,5 +1,5 @@
 // @ts-check
-const { TicketMessagesModel } = require('../schemas/ticket-messages');
+const ticketMessageRepository = require('../repositories/ticket-message');
 
 /**
  *
@@ -15,14 +15,12 @@ async function insertDummy(
     ticketId,
     repliedTo = null,
 ) {
-    return (
-        await new TicketMessagesModel({
-            userId,
-            content,
-            ticketId,
-            repliedTo,
-        }).save()
-    ).id;
+    return await ticketMessageRepository.create(
+        userId,
+        content,
+        ticketId,
+        repliedTo,
+    );
 }
 
 module.exports = { insertDummy };

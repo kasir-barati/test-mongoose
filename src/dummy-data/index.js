@@ -1,9 +1,7 @@
 // @ts-check
-const { UserModel } = require('../schemas/users');
-const { TicketPriorityModel } = require('../schemas/ticket-priority');
-const {
-    TicketDepartementModel,
-} = require('../schemas/ticket-departements');
+const userRepository = require('../repositories/user');
+const ticketPriorityRepository = require('../repositories/ticket-priority');
+const ticketDepartementRepository = require('../repositories/ticket-departement');
 
 const {
     insertDummy: insertDummyTicketMessage,
@@ -14,37 +12,33 @@ const { insertDummy: insertDummyTicket } = require('./ticket');
  * @returns {Promise<void>}
  */
 async function insertDummy() {
-    const adminId = await UserModel.findOne({
-        email: 'admin@admin.com',
-    })
-        .select('_id')
-        .exec();
-    const userId = await UserModel.findOne({ email: 'test@test.com' })
-        .select('_id')
-        .exec();
-    const ticketPriority = await TicketPriorityModel.findOne({
-        title: 'critical',
-    })
-        .select('_id')
-        .exec();
-    const ticketDepartement = await TicketDepartementModel.findOne({
-        name: 'support',
-    }).exec();
+    const adminId = (
+        await userRepository.fetchByEmail('admin@admin.com')
+    )._id;
+    const userId = (
+        await userRepository.fetchByEmail('test@test.com')
+    )._id;
+    const ticketPriority = await ticketPriorityRepository.fetchByTitle(
+        'critical',
+    );
+    const ticketDepartement = await ticketDepartementRepository.fetchByDepartementName(
+        'support',
+    );
 
     const ticketId = await insertDummyTicket(
         'new title for new ticket',
-        userId._id,
+        userId,
         ticketPriority._id,
         ticketDepartement._id,
         {
-            from: adminId._id,
-            to: ticketDepartement.members[1],
+            from: adminId,
+            to: ticketDepartement.members[1].userId,
             description: 'desc for ticket',
         },
     );
 
     const ticketMessage = await insertDummyTicketMessage(
-        userId._id,
+        userId,
         'ticket message is string and just text',
         ticketId,
     );

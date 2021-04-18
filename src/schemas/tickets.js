@@ -27,7 +27,7 @@ const ticketsSchema = new Schema(
             required: true,
             ref: userCollectioName,
         },
-        deleted: {
+        isDeleted: {
             type: Boolean,
             default: false,
             required: true,
