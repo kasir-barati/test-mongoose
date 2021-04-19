@@ -4,8 +4,7 @@ require('dotenv').config({
     path: path.join(__dirname, '..', '.env'),
 });
 
-const mongoose = require('mongoose');
-
+const { logger } = require('./common/log');
 // Seeders
 const { insert: insertUsers } = require('./seeders/users');
 const {
@@ -18,16 +17,29 @@ const {
 // dummy data
 const { insertDummy } = require('./dummy-data/index');
 
-mongoose
-    .connect(
-        `mongodb://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOST}:${process.env.MONGODB_EXPOSED_PORT}/${process.env.MONGODB_DATABASE}`,
-        {
-            autoReconnect: true,
-            reconnectTries: 30,
-        },
-    )
+const expressApp = require('./app');
+const mongodbConfig = require('./configs/mongodb');
+
+mongodbConfig
+    .connect()
     .then(insertData)
-    .catch(console.error);
+    .then((port) => {
+        logger('info', 'server', {
+            message: `server connected on ${port}`,
+        });
+    })
+    .catch((error) => {
+        logger(
+            'error',
+            'db',
+            {
+                message:
+                    error?.message ??
+                    'Some problem happended during the connecting/inserting to the MongoDB',
+            },
+            error,
+        );
+    });
 
 async function insertData(connection) {
     const {
@@ -49,4 +61,17 @@ async function insertData(connection) {
     } = await insertPriorities();
 
     await insertDummy();
+
+    return expressApp.listen().catch((error) => {
+        logger(
+            'error',
+            'server',
+            {
+                message:
+                    error?.message ??
+                    `Server could not starts on the specified port`,
+            },
+            error,
+        );
+    });
 }
