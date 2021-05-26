@@ -5,6 +5,8 @@ require('dotenv').config({
 });
 
 const mongoose = require('mongoose');
+const { IndexModel } = require('./models/index.model');
+const { mistakes } = require('./dummy-reactions/extra-keys');
 
 mongoose
     .connect(
@@ -15,6 +17,6 @@ mongoose
         },
     )
     .then((connection) => {
-        console.log(connection);
+        console.log(mistakes.insertExtraFields(IndexModel));
     })
     .catch(console.error);
