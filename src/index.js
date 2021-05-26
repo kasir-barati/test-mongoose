@@ -6,7 +6,7 @@ require('dotenv').config({
 
 const mongoose = require('mongoose');
 
-const { PostModel } = require('./post.model');
+const { PostModel } = require('./models/post.model');
 
 mongoose
     .connect(
