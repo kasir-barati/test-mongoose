@@ -1,12 +1,14 @@
 import { model, Schema, Document } from 'mongoose';
-import { RoleDocument } from './role.schema';
 
+export interface Profile {
+    avatar: string;
+    nickname: string;
+}
 export interface UserDocument extends Document {
-    _id?: string;
     phoneNumber: string;
     username: string;
     password?: string;
-    role: string | RoleDocument;
+    profile?: Profile;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -16,10 +18,15 @@ const userSchema = new Schema<UserDocument>(
         phoneNumber: { type: String, required: true, unique: true },
         username: { type: String, unique: true, required: false },
         password: String,
-        role: {
-            type: Schema.Types.ObjectId,
-            required: true,
-            ref: 'role',
+        profile: {
+            avatar: {
+                type: String,
+                required: true,
+            },
+            nickname: {
+                type: String,
+                required: true,
+            },
         },
     },
     {
