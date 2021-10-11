@@ -8,7 +8,7 @@ dotenv.config({
 });
 
 import { connectToMongoDB } from './configs/mongodb.config';
-import { UserDocument } from './schemas/user.schema';
+import { UserDocument, UserModel } from './schemas/user.schema';
 import { UserRepository } from './repositories/user.repository';
 
 (async () => {
@@ -21,14 +21,25 @@ import { UserRepository } from './repositories/user.repository';
         username: 'kasir_barati',
     };
     const user = await userRepository.create(userDocument);
-    const updatedUser = await userRepository.findByIdAndUpdate(
+    const fixRequiredNestedObjectsS1 = await userRepository.findByIdAndUpdate(
         user._id.toString(),
         {
             profile: {
-                ...(sampleCondition
-                    ? { avatar: 'sample.com/sample/avatar.png' }
-                    : {}),
-                ...(sampleCondition ? { nicname: 'kasir_san' } : {}),
+                avatar: sampleCondition
+                    ? 'sample.com/sample/avatar.png'
+                    : user.profile?.avatar ?? '',
+                nickname: sampleCondition
+                    ? 'kasir_san'
+                    : user.profile?.nickname ?? '',
+            },
+        },
+    );
+    const fixRequiredNestedObjectsS2 = await userRepository.findByIdAndUpdate(
+        user._id.toString(),
+        {
+            profile: {
+                avatar: sampleCondition ? 'sample.com/sample/avatar.png' : '',
+                nickname: sampleCondition ? 'kasir_san' : 'kasir',
             },
         },
     );
