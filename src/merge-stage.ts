@@ -1,11 +1,16 @@
-import { Db, MongoClient } from 'mongodb';
+import { Db, MongoClient, ObjectId } from 'mongodb';
+
+import admins from './admins.json';
 
 export async function mergeStage(db: Db, client: MongoClient) {
     const session = client.startSession();
+
     try {
         session.startTransaction();
 
         console.log('admin to user');
+
+        await db.collection('admins').insertMany(admins);
 
         const adminCount = await db
             .collection('admins')
