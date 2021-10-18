@@ -2,9 +2,9 @@ version: "3.7"
 
 services:
     mongo:
-        image: bitnami/mongodb:4.4-debian-10
+        image: mongo:4
         container_name: test_mongoose_db
-        hostname: $APP_NAME
+        hostname: aggregate-in-node-mongodb-driver
         env_file:
             - ./.env
         ports:
